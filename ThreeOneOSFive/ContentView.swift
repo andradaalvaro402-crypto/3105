@@ -187,7 +187,7 @@ struct ContentView: View {
         let selected = AppSection(rawValue: tabNavigation.selectedTab)
         return selected.flatMap {
             featureVisibility.isVisible($0) ? $0 : nil
-        } ?? .home
+        } ?? .installed
     }
 
     private func openSettings() {
