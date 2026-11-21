@@ -1,0 +1,20 @@
+name: build-ipa
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          xcodebuild -project ThreeOneOSFive.xcodeproj -target 3105 \
+            -configuration Release -sdk iphoneos -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+      - run: |
+          mkdir -p out/Payload
+          cp -R build/Build/Products/Release-iphoneos/3105.app out/Payload/
+          cd out && zip -qry 3105-mod-unsigned.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 3105-mod-unsigned
+          path: out/3105-mod-unsigned.ipa
